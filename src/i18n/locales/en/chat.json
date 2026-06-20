@@ -62,7 +62,9 @@
   },
   "thinking": {
     "title": "Thinking...",
-    "emoji": "💭 Thinking..."
+    "emoji": "💭 Thinking...",
+    "thoughtForFewSeconds": "Thought for a few seconds",
+    "thoughtForSeconds": "Thought for {{duration}} seconds"
   },
   "json": {
     "response": "JSON Response"
@@ -157,6 +159,11 @@
       "opencode": "Ready to use OpenCode with {{model}}. Start typing your message below.",
       "default": "Select a provider above to begin"
     },
+    "clickToChange": "Click to change model",
+    "searchModels": "Search models...",
+    "noModelsFound": "No models found.",
+    "modelSelector": "Model Selector",
+    "chooseModel": "Choose a model",
     "pressToSearch": "Press <kbd>{{shortcut}}</kbd> to search sessions, files, and commits"
   },
   "session": {
@@ -235,6 +242,13 @@
   },
   "projectSelection": {
     "startChatWithProvider": "Select a project to start chatting with {{provider}}"
+  },
+  "toolStatus": {
+    "running": "Running",
+    "completed": "Completed",
+    "error": "Error",
+    "denied": "Denied",
+    "runningTask": "Running task"
   },
   "tasks": {
     "nextTaskPrompt": "Start the next task"

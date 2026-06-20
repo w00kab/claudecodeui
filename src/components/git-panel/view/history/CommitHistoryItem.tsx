@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
 import type { GitCommitSummary } from '../../types/types';
@@ -29,6 +30,7 @@ export default function CommitHistoryItem({
   wrapText,
   onToggle,
 }: CommitHistoryItemProps) {
+  const { t } = useTranslation('settings');
   const fileSummary = useMemo(() => {
     if (!diff) return null;
     return parseCommitFiles(diff);
@@ -73,11 +75,11 @@ export default function CommitHistoryItem({
             {/* Author + Date */}
             <div className="mb-3 flex gap-4 text-xs text-muted-foreground">
               <span>
-                <span className="text-muted-foreground/60">Author </span>
+                <span className="text-muted-foreground/60">{t('gitPanel.commit.author')} </span>
                 {commit.author}
               </span>
               <span>
-                <span className="text-muted-foreground/60">Date </span>
+                <span className="text-muted-foreground/60">{t('gitPanel.commit.date')} </span>
                 {formatDate(commit.date)}
               </span>
             </div>
@@ -86,15 +88,15 @@ export default function CommitHistoryItem({
             {fileSummary && (
               <div className="mb-3 flex gap-4 rounded-md bg-muted/80 px-4 py-2 text-center text-xs">
                 <div>
-                  <div className="text-muted-foreground/60">Files</div>
+                  <div className="text-muted-foreground/60">{t('gitPanel.commit.files')}</div>
                   <div className="font-semibold text-foreground">{fileSummary.totalFiles}</div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground/60">Added</div>
+                  <div className="text-muted-foreground/60">{t('gitPanel.commit.added')}</div>
                   <div className="font-semibold text-green-600 dark:text-green-400">+{fileSummary.totalInsertions}</div>
                 </div>
                 <div>
-                  <div className="text-muted-foreground/60">Removed</div>
+                  <div className="text-muted-foreground/60">{t('gitPanel.commit.removed')}</div>
                   <div className="font-semibold text-red-600 dark:text-red-400">-{fileSummary.totalDeletions}</div>
                 </div>
               </div>

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Check, Download, RotateCcw, Trash2, Upload } from 'lucide-react';
 import {
   CONFIRMATION_ACTION_LABELS,
@@ -35,6 +36,7 @@ function renderConfirmActionIcon(actionType: ConfirmationRequest['type']) {
 }
 
 export default function ConfirmActionModal({ action, onCancel, onConfirm }: ConfirmActionModalProps) {
+  const { t } = useTranslation('settings');
   const titleId = action ? `confirmation-title-${action.type}` : undefined;
 
   useEffect(() => {

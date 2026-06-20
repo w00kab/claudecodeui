@@ -334,8 +334,8 @@ export default function SidebarContent({
                   <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                     <Activity className="h-3.5 w-3.5" />
                   </span>
-                  <span className="truncate text-xs font-normal text-foreground">
-                    {t('running.title', 'Running now')}
+                  <span className="truncate text-xs font-medium text-foreground">
+                    {t('running.title')}
                   </span>
                 </div>
                 <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-normal text-emerald-700 dark:text-emerald-300">

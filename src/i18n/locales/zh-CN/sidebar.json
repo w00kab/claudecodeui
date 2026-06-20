@@ -49,7 +49,8 @@
     "save": "保存",
     "cancel": "取消",
     "clearSearch": "清除搜索",
-    "openCommandPalette": "打开命令面板"
+    "openCommandPalette": "打开命令面板",
+    "processingSessionIndicator": "会话处理中"
   },
   "navigation": {
     "chat": "聊天",
@@ -114,6 +115,9 @@
     "restoreSessionFailed": "恢复会话失败，请重试。",
     "restoreSessionError": "恢复会话时出错，请重试。"
   },
+  "running": {
+    "title": "正在运行"
+  },
   "version": {
     "updateAvailable": "有可用更新"
   },
@@ -126,6 +130,8 @@
     "tryDifferentQuery": "尝试不同的搜索词",
     "matches_one": "{{count}} 个匹配",
     "matches_other": "{{count}} 个匹配",
+    "modeRunning": "运行中",
+    "runningTooltip": "运行中的会话",
     "projectsScanned_one": "{{count}} 个项目已扫描",
     "projectsScanned_other": "{{count}} 个项目已扫描"
   },
@@ -135,6 +141,11 @@
     "confirmDelete": "您想如何处理",
     "sessionCount_one": "此项目包含 {{count}} 个对话。",
     "sessionCount_other": "此项目包含 {{count}} 个对话。",
+    "archiveProject": "归档项目",
+    "archiveSession": "归档会话",
+    "archiveSessionNotice": "归档后会话将不在活跃列表中显示，但历史记录会保留。",
+    "archivedSessionNotice": "此会话已归档。您可以继续隐藏或永久删除。",
+    "deleteSessionPermanently": "永久删除",
     "removeFromSidebar": "仅从侧边栏移除",
     "deleteAllData": "永久删除所有数据",
     "allConversationsDeleted": "项目将从侧边栏中移除。您的文件、记忆和会话数据将会保留。",

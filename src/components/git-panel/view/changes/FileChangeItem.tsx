@@ -1,7 +1,15 @@
+import { useTranslation } from 'react-i18next';
 import { ChevronRight, Trash2 } from 'lucide-react';
 import type { FileStatusCode } from '../../types/types';
-import { getStatusBadgeClass, getStatusLabel } from '../../utils/gitPanelUtils';
+import { getStatusBadgeClass } from '../../utils/gitPanelUtils';
 import GitDiffViewer from '../shared/GitDiffViewer';
+
+const STATUS_LABEL_KEYS: Record<string, string> = {
+  M: 'gitPanel.fileStatus.modified',
+  A: 'gitPanel.fileStatus.added',
+  D: 'gitPanel.fileStatus.deleted',
+  U: 'gitPanel.fileStatus.untracked',
+};
 
 type FileChangeItemProps = {
   filePath: string;
@@ -32,7 +40,8 @@ export default function FileChangeItem({
   onToggleWrapText,
   onRequestFileAction,
 }: FileChangeItemProps) {
-  const statusLabel = getStatusLabel(status);
+  const { t } = useTranslation('settings');
+  const statusLabel = t(STATUS_LABEL_KEYS[status] || 'gitPanel.fileStatus.untracked');
   const badgeClass = getStatusBadgeClass(status);
 
   return (
@@ -64,7 +73,7 @@ export default function FileChangeItem({
               event.stopPropagation();
               onOpenFile(filePath);
             }}
-            title="Click to open file"
+            title={t('gitPanel.diff.openFile')}
           >
             {filePath}
           </span>

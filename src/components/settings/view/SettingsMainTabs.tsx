@@ -30,7 +30,7 @@ export default function SettingsMainTabs({ activeTab, onChange }: SettingsMainTa
 
   return (
     <div className="border-b border-border">
-       <div className="flex px-4 md:px-6 overflow-x-auto scrollbar-hide" role="tablist" aria-label={t('mainTabs.label', { defaultValue: 'Settings' })}>
+       <div className="flex px-4 md:px-6 overflow-x-auto scrollbar-hide" role="tablist" aria-label={t('mainTabs.label')}>
         {TAB_CONFIG.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;

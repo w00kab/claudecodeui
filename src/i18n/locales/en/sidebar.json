@@ -49,7 +49,8 @@
     "save": "Save",
     "cancel": "Cancel",
     "clearSearch": "Clear search",
-    "openCommandPalette": "Open command palette"
+    "openCommandPalette": "Open command palette",
+    "processingSessionIndicator": "Processing session"
   },
   "navigation": {
     "chat": "Chat",
@@ -114,6 +115,9 @@
     "restoreSessionFailed": "Failed to restore session. Please try again.",
     "restoreSessionError": "Error restoring session. Please try again."
   },
+  "running": {
+    "title": "Running now"
+  },
   "version": {
     "updateAvailable": "Update available"
   },
@@ -126,6 +130,8 @@
     "tryDifferentQuery": "Try a different search query",
     "matches_one": "{{count}} match",
     "matches_other": "{{count}} matches",
+    "modeRunning": "Running",
+    "runningTooltip": "Running sessions",
     "projectsScanned_one": "{{count}} project scanned",
     "projectsScanned_other": "{{count}} projects scanned"
   },
@@ -135,6 +141,11 @@
     "confirmDelete": "What would you like to do with",
     "sessionCount_one": "This project contains {{count}} conversation.",
     "sessionCount_other": "This project contains {{count}} conversations.",
+    "archiveProject": "Archive project",
+    "archiveSession": "Archive session",
+    "archiveSessionNotice": "Archive keeps the session out of the active list while preserving its history.",
+    "archivedSessionNotice": "This session is already archived. You can keep it hidden or delete it permanently.",
+    "deleteSessionPermanently": "Delete permanently",
     "removeFromSidebar": "Remove from sidebar only",
     "deleteAllData": "Delete all data permanently",
     "allConversationsDeleted": "The project will be removed from the sidebar. Your files, memories, and session data will be preserved.",

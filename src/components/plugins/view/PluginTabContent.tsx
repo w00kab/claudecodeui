@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../../contexts/ThemeContext';
 import { authenticatedFetch } from '../../../utils/api';
 import { usePlugins } from '../../../contexts/PluginsContext';
@@ -46,6 +47,7 @@ export default function PluginTabContent({
   selectedProject,
   selectedSession,
 }: PluginTabContentProps) {
+  const { t } = useTranslation('settings');
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDarkMode } = useTheme();
   const { plugins } = usePlugins();
@@ -126,7 +128,7 @@ export default function PluginTabContent({
         if (containerRef.current) {
           const errDiv = document.createElement('div');
           errDiv.style.cssText = 'padding:16px;font-size:13px;color:#dc2626';
-          errDiv.textContent = `Plugin failed to load: ${String(err)}`;
+          errDiv.textContent = t('plugins.errorLoading', { error: String(err) });
           containerRef.current.replaceChildren(errDiv);
         }
       }

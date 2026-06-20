@@ -94,7 +94,7 @@
     "git": "Git",
     "apiTokens": "API 和令牌",
     "tasks": "任务",
-    "computer": "计算机使用",
+    "browser": "浏览器",
     "notifications": "通知",
     "plugins": "插件",
     "about": "关于"
@@ -234,6 +234,10 @@
     },
     "status": {
       "success": "保存成功"
+    },
+    "placeholders": {
+      "name": "张三",
+      "email": "zhangsan@example.com"
     }
   },
   "apiKeys": {
@@ -275,7 +279,9 @@
       },
       "empty": "尚未添加 GitHub 令牌。",
       "added": "添加时间：",
-      "confirmDelete": "确定要删除此 GitHub 令牌吗？"
+      "confirmDelete": "确定要删除此 GitHub 令牌吗？",
+      "showToken": "显示令牌",
+      "hideToken": "隐藏令牌"
     },
     "apiDocsLink": "API 文档",
     "documentation": {
@@ -308,6 +314,13 @@
     }
   },
   "agents": {
+    "names": {
+      "claude": "Claude",
+      "cursor": "Cursor",
+      "codex": "Codex",
+      "gemini": "Gemini",
+      "opencode": "OpenCode"
+    },
     "authStatus": {
       "checking": "检查中...",
       "connected": "已连接",
@@ -472,13 +485,67 @@
     "installFailed": "安装失败",
     "uninstallFailed": "卸载失败",
     "toggleFailed": "切换失败",
-    "buildYourOwn": "构建您自己的插件",
+    "starterPluginLabel": "入门插件",
     "starter": "入门模板",
     "docs": "文档",
+    "sections": {
+      "officialTitle": "官方插件",
+      "officialDescription": "由 CloudCLI 团队维护，可直接安装。",
+      "unofficialTitle": "其他插件",
+      "unofficialDescription": "来自其他用户的非官方插件和集成。安装前请审查源代码。"
+    },
     "starterPlugin": {
       "name": "项目统计",
       "badge": "入门",
       "description": "查看项目的文件数、代码行数、文件类型分布以及最近活动。",
+      "install": "安装"
+    },
+    "terminalPlugin": {
+      "name": "终端",
+      "badge": "官方",
+      "description": "集成终端，可在界面内直接进行完整的 Shell 访问。",
+      "install": "安装"
+    },
+    "scheduledPromptPlugin": {
+      "name": "定时提示",
+      "badge": "非官方",
+      "description": "为工作区设置定时提示，查看运行历史，管理周期性的本地任务。",
+      "install": "安装"
+    },
+    "claudeWatchPlugin": {
+      "name": "Claude 监控",
+      "badge": "非官方",
+      "description": "监控长时间运行的 Claude Code 会话是否卡住，并提供进程控制。",
+      "install": "安装"
+    },
+    "prismCloudCLI": {
+      "name": "PRISM CloudCLI",
+      "badge": "非官方",
+      "description": "Claude Code 的会话智能分析，在 CloudCLI 内查看为什么你的会话在消耗 token。",
+      "install": "安装"
+    },
+    "sessionManagerPlugin": {
+      "name": "会话管理",
+      "badge": "非官方",
+      "description": "查看、管理和终止活跃的 Claude Code 会话。",
+      "install": "安装"
+    },
+    "tokenCostCalculatorPlugin": {
+      "name": "Token 成本计算器",
+      "badge": "非官方",
+      "description": "根据模型价格和 token 使用量计算 API 成本，支持预设模型定价。",
+      "install": "安装"
+    },
+    "taskQueuePlugin": {
+      "name": "任务队列",
+      "badge": "非官方",
+      "description": "任务队列仪表板，用于查看、过滤和启动智能体任务。",
+      "install": "安装"
+    },
+    "githubIssuesBoardPlugin": {
+      "name": "GitHub Issues 看板",
+      "badge": "非官方",
+      "description": "GitHub Issues 看板视图，支持双向 TaskMaster 同步，自动安装 /github-task CLI 技能。",
       "install": "安装"
     },
     "morePlugins": "更多",
@@ -487,5 +554,183 @@
     "installAriaLabel": "插件 git 仓库 URL",
     "tab": "标签",
     "runningStatus": "运行中"
+  },
+  "browser": {
+    "title": "浏览器",
+    "description": "允许智能体创建受控的 Playwright 浏览器会话，您可以在浏览器标签页中监控。",
+    "enableLabel": "启用浏览器",
+    "enableDescription": "为支持的智能体注册浏览器功能。智能体可以创建浏览器会话，您可以查看、停止和删除它们。",
+    "runtime": {
+      "status": "状态",
+      "checking": "检查中...",
+      "installed": "已安装",
+      "missing": "缺失",
+      "ready": "就绪",
+      "setupRequired": "需要配置",
+      "disabled": "已禁用",
+      "required": "需要浏览器运行时",
+      "installHint": "在智能体创建浏览器会话之前，请先安装浏览器运行时。",
+      "installButton": "安装运行时",
+      "installing": "安装中..."
+    },
+    "errors": {
+      "loadSettings": "加载浏览器设置失败",
+      "loadStatus": "加载浏览器状态失败",
+      "saveSettings": "保存浏览器设置失败",
+      "installRuntime": "安装浏览器运行时失败"
+    }
+  },
+  "about": {
+    "description": "开源 AI 编程助手界面",
+    "starOnGithub": "在 GitHub 上加星",
+    "github": "GitHub",
+    "discord": "Discord",
+    "docs": "文档",
+    "cloudcliAi": "cloudcli.ai",
+    "tryHosted": "试用 CloudCLI 托管版",
+    "hostedDescription": "团队协作、共享 MCP 配置、跨环境同步设置以及托管基础设施。",
+    "learnMore": "了解更多",
+    "proFeatures": "CloudCLI Pro 功能",
+    "syncSettings": "同步设置",
+    "syncSettingsDesc": "在所有环境中同步您的偏好设置、MCP 配置和主题。",
+    "teamManagement": "团队管理",
+    "teamManagementDesc": "多用户支持、基于角色的访问控制以及团队共享项目。",
+    "license": "基于 AGPL-3.0 许可"
+  },
+  "plugins": {
+    "errorLoading": "插件加载失败：{{error}}"
+  },
+  "gitPanel": {
+    "tabs": {
+      "changes": "更改",
+      "commits": "提交",
+      "branches": "分支"
+    },
+    "changes": {
+      "noCommits": "尚无提交",
+      "noCommitsDesc": "此仓库尚未有任何提交。创建您的第一次提交以开始跟踪更改。",
+      "creatingInitialCommit": "正在创建初始提交...",
+      "createInitialCommit": "创建初始提交",
+      "noChanges": "未检测到更改",
+      "staged": "已暂存",
+      "changes": "更改",
+      "unstageAll": "全部取消暂存",
+      "stageAll": "全部暂存",
+      "noStagedFiles": "没有已暂存的文件",
+      "allChangesStaged": "所有更改已暂存"
+    },
+    "fileStatus": {
+      "modified": "已修改",
+      "added": "已添加",
+      "deleted": "已删除",
+      "untracked": "未跟踪",
+      "legend": "文件状态说明"
+    },
+    "commit": {
+      "messagePlaceholder": "提交信息（Ctrl+Enter 提交）",
+      "generateMessage": "生成提交信息",
+      "committing": "正在提交...",
+      "commit": "提交",
+      "commitChanges": "提交更改",
+      "filesSelected": "{{count}} 个文件已选中",
+      "filesSelected_other": "{{count}} 个文件已选中",
+      "author": "作者",
+      "date": "日期",
+      "files": "文件",
+      "added": "新增",
+      "removed": "删除",
+      "changedFiles": "更改的文件"
+    },
+    "branch": {
+      "createNew": "创建新分支",
+      "current": "当前",
+      "remote": "远程",
+      "ahead": "领先",
+      "behind": "落后",
+      "switchTo": "切换到 {{name}}",
+      "switch_": "切换",
+      "deleteBranch": "删除 {{name}}",
+      "local": "本地",
+      "remote_": "远程",
+      "newBranch": "新建分支",
+      "noBranches": "未找到分支",
+      "branchName": "分支名称",
+      "branchPlaceholder": "feature/新功能",
+      "branchFrom": "此操作将从当前分支（{{branch}}）创建新分支",
+      "creating": "正在创建...",
+      "createBranch": "创建分支",
+      "upToDate": "已是最新",
+      "publishBranch": "将分支 \"{{branch}}\" 发布到 {{remote}}？",
+      "publish_": "发布",
+      "publishing": "正在发布...",
+      "publishTitle": "发布 \"{{branch}}\" 到 {{remote}}",
+      "switchConfirm": "切换到分支 \"{{branch}}\"？请确保您没有未提交的更改。",
+      "deleteConfirm": "删除分支 \"{{branch}}\"？此操作无法撤销。"
+    },
+    "header": {
+      "pullConfirm": "从 {{remote}} 拉取 {{count}} 个提交？",
+      "pullConfirm_other": "从 {{remote}} 拉取 {{count}} 个提交？",
+      "pushConfirm": "推送 {{count}} 个提交到 {{remote}}？",
+      "pushConfirm_other": "推送 {{count}} 个提交到 {{remote}}？",
+      "revertConfirm": "撤销最近的本地提交？此操作将删除提交但保留更改的暂存状态。",
+      "fetchFrom": "从 {{remote}} 获取",
+      "fetching": "正在获取...",
+      "fetch": "获取",
+      "pulling": "正在拉取...",
+      "pull": "拉取",
+      "pushing": "正在推送...",
+      "push": "推送",
+      "revert": "撤销最近的本地提交",
+      "refresh": "刷新 Git 状态",
+      "dismissError": "关闭错误",
+      "publishConfirm": "将分支 \"{{branch}}\" 发布到 {{remote}}？"
+    },
+    "confirm": {
+      "discardTitle": "放弃更改",
+      "deleteTitle": "删除文件",
+      "confirmTitle": "确认操作",
+      "pullTitle": "确认拉取",
+      "pushTitle": "确认推送",
+      "publishTitle": "发布分支",
+      "revertTitle": "撤销本地提交",
+      "deleteBranchTitle": "删除分支",
+      "discardAction": "放弃",
+      "deleteAction": "删除",
+      "confirmAction": "确认",
+      "pullAction": "拉取",
+      "pushAction": "推送",
+      "publishAction": "发布",
+      "revertAction": "撤销提交",
+      "deleteBranchAction": "删除",
+      "cancel": "取消"
+    },
+    "diff": {
+      "noDiff": "无可用差异",
+      "largePreview": "大型差异预览：渲染已限制以保持标签页响应。",
+      "collapse": "折叠差异",
+      "expand": "展开差异",
+      "openFile": "点击打开文件",
+      "deleteUntracked": "删除未跟踪文件",
+      "discardChanges": "放弃更改",
+      "delete_": "删除",
+      "discard": "放弃",
+      "scrollHorizontal": "切换到水平滚动",
+      "scrollWrap": "切换到自动换行",
+      "scroll": "滚动",
+      "wrap": "换行"
+    },
+    "emptyState": {
+      "selectProject": "选择一个项目以查看源代码管理",
+      "noCommits": "未找到提交",
+      "noBranches": "未找到分支"
+    },
+    "errorState": {
+      "tipLabel": "提示：",
+      "tipMessage": "在项目目录中运行 git init 以初始化 Git 源代码管理。"
+    },
+    "toast": {
+      "deleteConfirm": "删除未跟踪文件 \"{{path}}\"？此操作无法撤销。",
+      "discardConfirm": "放弃对 \"{{path}}\" 的所有更改？此操作无法撤销。"
+    }
   }
 }
