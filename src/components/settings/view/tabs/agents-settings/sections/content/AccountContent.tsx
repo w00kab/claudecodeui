@@ -11,18 +11,15 @@ type AccountContentProps = {
 };
 
 type AgentVisualConfig = {
-  name: string;
   bgClass: string;
   borderClass: string;
   textClass: string;
   subtextClass: string;
   buttonClass: string;
-  description?: string;
 };
 
 const agentConfig: Record<AgentProvider, AgentVisualConfig> = {
   claude: {
-    name: 'Claude',
     bgClass: 'bg-blue-50 dark:bg-blue-900/20',
     borderClass: 'border-blue-200 dark:border-blue-800',
     textClass: 'text-blue-900 dark:text-blue-100',
@@ -30,7 +27,6 @@ const agentConfig: Record<AgentProvider, AgentVisualConfig> = {
     buttonClass: 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800',
   },
   cursor: {
-    name: 'Cursor',
     bgClass: 'bg-purple-50 dark:bg-purple-900/20',
     borderClass: 'border-purple-200 dark:border-purple-800',
     textClass: 'text-purple-900 dark:text-purple-100',
@@ -38,7 +34,6 @@ const agentConfig: Record<AgentProvider, AgentVisualConfig> = {
     buttonClass: 'bg-purple-600 hover:bg-purple-700 active:bg-purple-800',
   },
   codex: {
-    name: 'Codex',
     bgClass: 'bg-muted/50',
     borderClass: 'border-gray-300 dark:border-gray-600',
     textClass: 'text-gray-900 dark:text-gray-100',
@@ -46,8 +41,6 @@ const agentConfig: Record<AgentProvider, AgentVisualConfig> = {
     buttonClass: 'bg-gray-800 hover:bg-gray-900 active:bg-gray-950 dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-500',
   },
   gemini: {
-    name: 'Gemini',
-    description: 'Google Gemini AI assistant',
     bgClass: 'bg-indigo-50 dark:bg-indigo-900/20',
     borderClass: 'border-indigo-200 dark:border-indigo-800',
     textClass: 'text-indigo-900 dark:text-indigo-100',
@@ -55,8 +48,6 @@ const agentConfig: Record<AgentProvider, AgentVisualConfig> = {
     buttonClass: 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800',
   },
   opencode: {
-    name: 'OpenCode',
-    description: 'OpenCode CLI assistant',
     bgClass: 'bg-zinc-50 dark:bg-zinc-900/20',
     borderClass: 'border-zinc-200 dark:border-zinc-700',
     textClass: 'text-zinc-900 dark:text-zinc-100',
@@ -74,11 +65,9 @@ export default function AccountContent({ agent, authStatus, onLogin }: AccountCo
       <div className="mb-4 flex items-center gap-3">
         <SessionProviderLogo provider={agent} className="h-6 w-6" />
         <div>
-          <h3 className="text-lg font-medium text-foreground">{config.name}</h3>
+          <h3 className="text-lg font-medium text-foreground">{t(`agents.names.${agent}`)}</h3>
           <p className="text-sm text-muted-foreground">
-            {t(`agents.account.${agent}.description`, {
-              defaultValue: config.description || `${config.name} CLI assistant`,
-            })}
+            {t(`agents.account.${agent}.description`)}
           </p>
         </div>
       </div>
@@ -129,7 +118,7 @@ export default function AccountContent({ agent, authStatus, onLogin }: AccountCo
                   <div className={`text-sm ${config.subtextClass}`}>
                     {authStatus.authenticated
                       ? t('agents.login.reAuthDescription')
-                      : t('agents.login.description', { agent: config.name })}
+                      : t('agents.login.description', { agent: t(`agents.names.${agent}`) })}
                   </div>
                 </div>
                 <Button

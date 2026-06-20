@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { FileText, GitBranch, History } from 'lucide-react';
 import type { GitPanelView } from '../types/types';
 
@@ -8,13 +9,13 @@ type GitViewTabsProps = {
   onChange: (view: GitPanelView) => void;
 };
 
-const TABS: { id: GitPanelView; label: string; Icon: typeof FileText }[] = [
-  { id: 'changes', label: 'Changes', Icon: FileText },
-  { id: 'history', label: 'Commits', Icon: History },
-  { id: 'branches', label: 'Branches', Icon: GitBranch },
-];
-
 export default function GitViewTabs({ activeView, isHidden, changeCount, onChange }: GitViewTabsProps) {
+  const { t } = useTranslation('settings');
+  const TABS: { id: GitPanelView; label: string; Icon: typeof FileText }[] = [
+    { id: 'changes', label: t('gitPanel.tabs.changes'), Icon: FileText },
+    { id: 'history', label: t('gitPanel.tabs.commits'), Icon: History },
+    { id: 'branches', label: t('gitPanel.tabs.branches'), Icon: GitBranch },
+  ];
   return (
     <div
       className={`flex border-b border-border/60 transition-all duration-300 ease-in-out ${

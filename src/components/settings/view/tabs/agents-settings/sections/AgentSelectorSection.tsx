@@ -1,15 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { PillBar, Pill } from '../../../../../../shared/view/ui';
 import SessionProviderLogo from '../../../../../llm-logo-provider/SessionProviderLogo';
 import type { AgentProvider } from '../../../../types/types';
 import type { AgentSelectorSectionProps } from '../types';
-
-const AGENT_NAMES: Record<AgentProvider, string> = {
-  claude: 'Claude',
-  cursor: 'Cursor',
-  codex: 'Codex',
-  gemini: 'Gemini',
-  opencode: 'OpenCode',
-};
 
 export default function AgentSelectorSection({
   agents,
@@ -17,6 +10,7 @@ export default function AgentSelectorSection({
   onSelectAgent,
   agentContextById,
 }: AgentSelectorSectionProps) {
+  const { t } = useTranslation('settings');
   return (
     <div className="flex-shrink-0 border-b border-border px-3 py-2 md:px-4 md:py-3">
       <PillBar className="w-full md:w-auto">
@@ -35,7 +29,7 @@ export default function AgentSelectorSection({
               className="min-w-0 flex-1 justify-center md:flex-initial"
             >
               <SessionProviderLogo provider={agent} className="h-4 w-4 flex-shrink-0" />
-              <span className="truncate">{AGENT_NAMES[agent]}</span>
+              <span className="truncate">{t(`agents.names.${agent}`)}</span>
               {agentContextById[agent].authStatus.authenticated && (
                 <span className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${dotColor}`} />
               )}

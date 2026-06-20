@@ -335,7 +335,7 @@ export default function SidebarContent({
                     <Activity className="h-3.5 w-3.5" />
                   </span>
                   <span className="truncate text-xs font-medium text-foreground">
-                    {t('running.title', 'Running now')}
+                    {t('running.title')}
                   </span>
                 </div>
                 <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-300">

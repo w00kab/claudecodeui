@@ -339,7 +339,11 @@ const MessageComponent = memo(({ message, prevMessage, createDiff, onFileOpen, a
             ) : message.isThinking ? (
               /* Thinking messages — Reasoning component (ai-elements pattern) */
               <Reasoning defaultOpen={false}>
-                <ReasoningTrigger />
+                <ReasoningTrigger getThinkingMessage={(isStreaming, duration) => {
+                  if (isStreaming || duration === 0) return t('thinking.emoji');
+                  if (duration === undefined) return <p>{t('thinking.thoughtForFewSeconds')}</p>;
+                  return <p>{t('thinking.thoughtForSeconds', { duration })}</p>;
+                }} />
                 <ReasoningContent>
                   <Markdown className="prose prose-sm prose-gray max-w-none dark:prose-invert">
                     {message.content}
@@ -354,7 +358,11 @@ const MessageComponent = memo(({ message, prevMessage, createDiff, onFileOpen, a
                 {/* Reasoning accordion */}
                 {showThinking && message.reasoning && (
                   <Reasoning className="mb-3" defaultOpen={false}>
-                    <ReasoningTrigger />
+                    <ReasoningTrigger getThinkingMessage={(isStreaming, duration) => {
+                  if (isStreaming || duration === 0) return t('thinking.emoji');
+                  if (duration === undefined) return <p>{t('thinking.thoughtForFewSeconds')}</p>;
+                  return <p>{t('thinking.thoughtForSeconds', { duration })}</p>;
+                }} />
                     <ReasoningContent>
                       <div className="whitespace-pre-wrap">
                         {message.reasoning}

@@ -1,6 +1,8 @@
+import i18n from '../../../../i18n/config.js';
+
 /**
  * Centralized tool configuration registry
- * Defines display behavior for all tool types 
+ * Defines display behavior for all tool types
  */
 
 export interface ToolDisplayConfig {
@@ -381,7 +383,7 @@ export const TOOL_CONFIGS: Record<string, ToolDisplayConfig> = {
       type: 'collapsible',
       title: (input) => {
         const subagentType = input.subagent_type || 'Agent';
-        const description = input.description || 'Running task';
+        const description = input.description || i18n.t('toolStatus.runningTask');
         return `Subagent / ${subagentType}: ${description}`;
       },
       defaultOpen: false,

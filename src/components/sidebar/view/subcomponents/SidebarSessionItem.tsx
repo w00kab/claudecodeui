@@ -160,7 +160,7 @@ export default function SidebarSessionItem({
                 <div className="min-w-0 flex-1 truncate text-xs font-medium text-foreground">{sessionView.sessionName}</div>
                 {isProcessing ? (
                   <span className="ml-auto flex-shrink-0">
-                    <Tooltip content={t('tooltips.processingSessionIndicator', 'Processing session')} position="top">
+                    <Tooltip content={t('tooltips.processingSessionIndicator')} position="top">
                       <span className="flex h-5 w-5 items-center justify-center rounded-md text-muted-foreground">
                         <Loader2 className="h-3 w-3 animate-spin" />
                       </span>
@@ -227,7 +227,7 @@ export default function SidebarSessionItem({
                       isEditing ? 'opacity-0' : 'group-hover:opacity-0',
                     )}
                   >
-                    <Tooltip content={t('tooltips.processingSessionIndicator', 'Processing session')} position="top">
+                    <Tooltip content={t('tooltips.processingSessionIndicator')} position="top">
                       <span className="flex h-5 w-5 items-center justify-center rounded-md text-muted-foreground">
                         <Loader2 className="h-3 w-3 animate-spin" />
                       </span>

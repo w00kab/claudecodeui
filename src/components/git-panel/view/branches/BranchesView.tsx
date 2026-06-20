@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Check, GitBranch, Globe, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { ConfirmationRequest, GitRemoteStatus } from '../../types/types';
@@ -33,6 +34,7 @@ type BranchRowProps = {
 };
 
 function BranchRow({ name, isCurrent, isRemote, aheadCount, behindCount, isMobile, onSwitch, onDelete }: BranchRowProps) {
+  const { t } = useTranslation('settings');
   return (
     <div
       className={`group flex items-center gap-3 border-b border-border/40 px-4 transition-colors hover:bg-accent/40 ${
@@ -57,24 +59,20 @@ function BranchRow({ name, isCurrent, isRemote, aheadCount, behindCount, isMobil
             {name}
           </span>
           {isCurrent && (
-            <span className="shrink-0 rounded-full bg-primary/15 px-1.5 py-0.5 text-xs font-semibold text-primary">
-              current
-            </span>
+            <span className="shrink-0 rounded-full bg-primary/15 px-1.5 py-0.5 text-xs font-semibold text-primary">{t('gitPanel.branch.current')}</span>
           )}
           {isRemote && !isCurrent && (
-            <span className="shrink-0 rounded-full bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-              remote
-            </span>
+            <span className="shrink-0 rounded-full bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">{t('gitPanel.branch.remote')}</span>
           )}
         </div>
         {/* Ahead/behind — only meaningful for the current branch */}
         {isCurrent && (aheadCount > 0 || behindCount > 0) && (
           <div className="flex items-center gap-2 text-xs">
             {aheadCount > 0 && (
-              <span className="text-green-600 dark:text-green-400">↑{aheadCount} ahead</span>
+              <span className="text-green-600 dark:text-green-400">↑{aheadCount} {t('gitPanel.branch.ahead')}</span>
             )}
             {behindCount > 0 && (
-              <span className="text-primary">↓{behindCount} behind</span>
+              <span className="text-primary">↓{behindCount} {t('gitPanel.branch.behind')}</span>
             )}
           </div>
         )}
@@ -89,14 +87,12 @@ function BranchRow({ name, isCurrent, isRemote, aheadCount, behindCount, isMobil
             <button
               onClick={onSwitch}
               className="rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              title={`Switch to ${name}`}
-            >
-              Switch
-            </button>
+              title={t('gitPanel.branch.switchTo', { name })}
+            >{t('gitPanel.branch.switch_')}</button>
             <button
               onClick={onDelete}
               className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-              title={`Delete ${name}`}
+              title={t('gitPanel.branch.deleteBranch', { name })}
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -137,6 +133,7 @@ export default function BranchesView({
   onDeleteBranch,
   onRequestConfirmation,
 }: BranchesViewProps) {
+  const { t } = useTranslation('settings');
   const [showNewBranchModal, setShowNewBranchModal] = useState(false);
 
   const aheadCount = remoteStatus?.ahead ?? 0;
@@ -145,7 +142,7 @@ export default function BranchesView({
   const requestSwitch = (branch: string) => {
     onRequestConfirmation({
       type: 'commit', // reuse neutral type for switch
-      message: `Switch to branch "${branch}"? Make sure you have no uncommitted changes.`,
+      message: t('gitPanel.branch.switchConfirm', { branch }),
       onConfirm: () => void onSwitchBranch(branch),
     });
   };
@@ -153,7 +150,7 @@ export default function BranchesView({
   const requestDelete = (branch: string) => {
     onRequestConfirmation({
       type: 'deleteBranch',
-      message: `Delete branch "${branch}"? This cannot be undone.`,
+      message: t('gitPanel.branch.deleteConfirm', { branch }),
       onConfirm: () => void onDeleteBranch(branch),
     });
   };
@@ -171,14 +168,14 @@ export default function BranchesView({
       {/* Create branch button */}
       <div className="flex items-center justify-between border-b border-border/40 px-4 py-2.5">
         <span className="text-sm text-muted-foreground">
-          {localBranches.length} local{remoteBranches.length > 0 ? `, ${remoteBranches.length} remote` : ''}
+          {localBranches.length} {t('gitPanel.branch.local')}{remoteBranches.length > 0 ? `, ${remoteBranches.length} ${t('gitPanel.branch.remote_')}` : ''}
         </span>
         <button
           onClick={() => setShowNewBranchModal(true)}
           className="flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
         >
           <Plus className="h-3.5 w-3.5" />
-          New branch
+          {t('gitPanel.branch.newBranch')}
         </button>
       </div>
 
@@ -186,7 +183,7 @@ export default function BranchesView({
       <div className="flex-1 overflow-y-auto">
         {localBranches.length > 0 && (
           <>
-            <SectionHeader label="Local" count={localBranches.length} />
+            <SectionHeader label={t('gitPanel.branch.local')} count={localBranches.length} />
             {localBranches.map((branch) => (
               <BranchRow
                 key={`local:${branch}`}
@@ -205,7 +202,7 @@ export default function BranchesView({
 
         {remoteBranches.length > 0 && (
           <>
-            <SectionHeader label="Remote" count={remoteBranches.length} />
+            <SectionHeader label={t('gitPanel.branch.remote_')} count={remoteBranches.length} />
             {remoteBranches.map((branch) => (
               <BranchRow
                 key={`remote:${branch}`}
@@ -225,7 +222,7 @@ export default function BranchesView({
         {localBranches.length === 0 && remoteBranches.length === 0 && (
           <div className="flex h-32 flex-col items-center justify-center gap-2 text-muted-foreground">
             <GitBranch className="h-10 w-10 opacity-30" />
-            <p className="text-sm">No branches found</p>
+            <p className="text-sm">{t('gitPanel.branch.noBranches')}</p>
           </div>
         )}
       </div>

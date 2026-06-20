@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { BrainIcon, ChevronDownIcon } from 'lucide-react';
+import i18n from '../../../i18n/config.js';
 
 import { cn } from '../../../lib/utils';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from './Collapsible';
@@ -136,12 +137,12 @@ export interface ReasoningTriggerProps extends React.ButtonHTMLAttributes<HTMLBu
 
 const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number): React.ReactNode => {
   if (isStreaming || duration === 0) {
-    return <Shimmer>Thinking...</Shimmer>;
+    return <Shimmer>{i18n.t('thinking.emoji')}</Shimmer>;
   }
   if (duration === undefined) {
-    return <p>Thought for a few seconds</p>;
+    return <p>{i18n.t('thinking.thoughtForFewSeconds')}</p>;
   }
-  return <p>Thought for {duration} seconds</p>;
+  return <p>{i18n.t('thinking.thoughtForSeconds', { duration })}</p>;
 };
 
 export const ReasoningTrigger = React.memo<ReasoningTriggerProps>(

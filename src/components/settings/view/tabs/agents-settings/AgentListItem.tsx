@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { cn } from '../../../../../lib/utils';
 import SessionProviderLogo from '../../../../llm-logo-provider/SessionProviderLogo';
 import type { AgentProvider, AuthStatus } from '../../../types/types';
@@ -11,29 +12,23 @@ type AgentListItemProps = {
 };
 
 type AgentConfig = {
-  name: string;
   color: 'blue' | 'purple' | 'gray' | 'indigo' | 'zinc';
 };
 
 const agentConfig: Record<AgentProvider, AgentConfig> = {
   claude: {
-    name: 'Claude',
     color: 'blue',
   },
   cursor: {
-    name: 'Cursor',
     color: 'purple',
   },
   codex: {
-    name: 'Codex',
     color: 'gray',
   },
   gemini: {
-    name: 'Gemini',
     color: 'indigo',
   },
   opencode: {
-    name: 'OpenCode',
     color: 'zinc',
   },
 };
@@ -63,6 +58,7 @@ export default function AgentListItem({
   onClick,
   isMobile = false,
 }: AgentListItemProps) {
+  const { t } = useTranslation('settings');
   const config = agentConfig[agentId];
   const colors = colorClasses[config.color];
 
@@ -79,7 +75,7 @@ export default function AgentListItem({
       >
         <div className="flex items-center justify-center gap-1.5">
           <SessionProviderLogo provider={agentId} className="h-4 w-4 flex-shrink-0" />
-          <span className="truncate text-xs font-medium">{config.name}</span>
+          <span className="truncate text-xs font-medium">{t(`agents.names.${agentId}`)}</span>
           {authStatus.authenticated && (
             <span className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${colors.dot}`} />
           )}
@@ -99,7 +95,7 @@ export default function AgentListItem({
       )}
     >
       <SessionProviderLogo provider={agentId} className="h-4 w-4 flex-shrink-0" />
-      <span>{config.name}</span>
+      <span>{t(`agents.names.${agentId}`)}</span>
       {authStatus.authenticated ? (
         <span className={`h-1.5 w-1.5 flex-shrink-0 rounded-full ${colors.dot}`} />
       ) : authStatus.loading ? (

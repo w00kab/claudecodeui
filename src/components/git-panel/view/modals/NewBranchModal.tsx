@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Plus, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -16,6 +17,7 @@ export default function NewBranchModal({
   onClose,
   onCreateBranch,
 }: NewBranchModalProps) {
+  const { t } = useTranslation('settings');
   const [newBranchName, setNewBranchName] = useState('');
 
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function NewBranchModal({
         aria-labelledby="new-branch-title"
       >
         <div className="p-6">
-          <h3 className="mb-4 text-lg font-semibold text-foreground">Create New Branch</h3>
+          <h3 className="mb-4 text-lg font-semibold text-foreground">{t('gitPanel.branch.createBranch')}</h3>
 
           <div className="mb-4">
             <label htmlFor="git-new-branch-name" className="mb-2 block text-sm font-medium text-foreground/80">
@@ -82,14 +84,14 @@ export default function NewBranchModal({
                   onClose();
                 }
               }}
-              placeholder="feature/new-feature"
+              placeholder={t('gitPanel.branch.branchPlaceholder')}
               className="w-full rounded-xl border border-border bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/20"
               autoFocus
             />
           </div>
 
           <p className="mb-4 text-sm text-muted-foreground">
-            This will create a new branch from the current branch ({currentBranch})
+            {t('gitPanel.branch.branchFrom', { branch: currentBranch })}
           </p>
 
           <div className="flex justify-end space-x-3">
@@ -107,12 +109,12 @@ export default function NewBranchModal({
               {isCreatingBranch ? (
                 <>
                   <RefreshCw className="h-3 w-3 animate-spin" />
-                  <span>Creating...</span>
+                  <span>{t('gitPanel.branch.creating')}</span>
                 </>
               ) : (
                 <>
                   <Plus className="h-3 w-3" />
-                  <span>Create Branch</span>
+                  <span>{t('gitPanel.branch.createBranch')}</span>
                 </>
               )}
             </button>

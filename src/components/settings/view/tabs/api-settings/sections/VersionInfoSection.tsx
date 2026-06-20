@@ -73,7 +73,7 @@ export default function VersionInfoSection({
               )}
             </div>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Open-source AI coding assistant interface
+              {t('about.description')}
             </p>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function VersionInfoSection({
         >
           <GitHubIcon className="h-4 w-4" />
           <Star className="h-3.5 w-3.5" />
-          <span>Star on GitHub</span>
+          <span>{t('about.starOnGithub')}</span>
         </a>
 
         {/* Links */}
@@ -99,7 +99,7 @@ export default function VersionInfoSection({
             className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
           >
             <GitHubIcon className="h-3.5 w-3.5" />
-            GitHub
+            {t('about.github')}
           </a>
           <a
             href={DISCORD_URL}
@@ -108,7 +108,7 @@ export default function VersionInfoSection({
             className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
           >
             <DiscordIcon className="h-3.5 w-3.5" />
-            Discord
+            {t('about.discord')}
           </a>
           <a
             href={DOCS_URL}
@@ -117,7 +117,7 @@ export default function VersionInfoSection({
             className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
           >
             <ExternalLink className="h-3 w-3" />
-            Docs
+            {t('about.docs')}
           </a>
           <a
             href={CLOUDCLI_URL}
@@ -126,16 +126,16 @@ export default function VersionInfoSection({
             className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
           >
             <ExternalLink className="h-3 w-3" />
-            cloudcli.ai
+            {t('about.cloudcliAi')}
           </a>
         </div>
 
         {/* Hosted CTA (OSS mode only) */}
         {!IS_PLATFORM && (
           <div className="rounded-xl border border-primary/10 bg-primary/5 p-4">
-            <h4 className="text-sm font-medium text-foreground">Try CloudCLI Hosted</h4>
+            <h4 className="text-sm font-medium text-foreground">{t('about.tryHosted')}</h4>
             <p className="mt-1 text-xs text-muted-foreground">
-              Team collaboration, shared MCP configs, settings sync across environments, and managed infrastructure.
+              {t('about.hostedDescription')}
             </p>
             <a
               href={CLOUDCLI_URL}
@@ -143,7 +143,7 @@ export default function VersionInfoSection({
               rel="noopener noreferrer"
               className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary transition-colors hover:underline"
             >
-              Learn more
+              {t('about.learnMore')}
               <ExternalLink className="h-3 w-3" />
             </a>
           </div>

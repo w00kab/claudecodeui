@@ -69,6 +69,63 @@ function resolveClaudeWrapperBinary(
   return null;
 }
 
+/**
+ * Returns the Windows ANSI code page number (e.g. 936 for GBK/Chinese).
+ */
+function readWindowsAnsiCodePage(
+  execFileSyncFn: typeof execFileSync,
+): number | null {
+  try {
+    const stdout = execFileSyncFn('reg.exe', [
+      'query',
+      'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Nls\\CodePage',
+      '/v', 'ACP',
+    ], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+      windowsHide: true,
+    });
+    const match = stdout.match(/ACP\s+REG_SZ\s+(\d+)/);
+    return match ? Number.parseInt(match[1], 10) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Tries to decode a buffer using a Windows code page number.
+ * Falls back to the raw buffer if the codec is not available.
+ */
+function decodeWithCodePage(buffer: Buffer, codePage: number): string {
+  try {
+    // Node.js TextDecoder supports common Windows codec names.
+    // CP 936  → 'gbk'
+    // CP 932  → 'shift_jis'
+    // CP 949  → 'euc-kr'
+    // CP 950  → 'big5'
+    // CP 1252 → 'windows-1252'
+    const encodingMap: Record<number, string> = {
+      936: 'gbk',
+      932: 'shift_jis',
+      949: 'euc-kr',
+      950: 'big5',
+      1250: 'windows-1250',
+      1251: 'windows-1251',
+      1252: 'windows-1252',
+      1253: 'windows-1253',
+      1254: 'windows-1254',
+      1255: 'windows-1255',
+      1256: 'windows-1256',
+      1257: 'windows-1257',
+      1258: 'windows-1258',
+    };
+    const encoding = encodingMap[codePage] || 'utf8';
+    return new TextDecoder(encoding).decode(buffer);
+  } catch {
+    return buffer.toString('utf8');
+  }
+}
+
 function resolveWindowsClaudeExecutablePath(
   configuredPath: string,
   deps: Required<ResolveClaudeCodeExecutablePathDependencies>,
@@ -86,15 +143,29 @@ function resolveWindowsClaudeExecutablePath(
   }
 
   if (explicitPath) {
+    // npm bin wrappers (e.g. node_modules/.bin/claude) resolve to the
+    // real binary one directory level up from .bin.
+    if (!pathApi.isAbsolute(configuredPath) || pathApi.basename(pathApi.dirname(configuredPath)) === '.bin') {
+      const binCandidate = pathApi.resolve(pathApi.dirname(configuredPath), '..', ...CLAUDE_WRAPPER_SEGMENTS);
+      if (deps.existsSync(binCandidate)) {
+        return binCandidate;
+      }
+    }
+
     return resolveClaudeWrapperBinary(configuredPath, deps) ?? configuredPath;
   }
 
   try {
-    const stdout = deps.execFileSync('where.exe', [configuredPath], {
-      encoding: 'utf8',
+    // where.exe outputs in the system ANSI code page (not UTF-8) on
+    // non-UTF-8 Windows locales (Chinese, Japanese, Korean, etc.).
+    // Decode with the system code page so non-ASCII paths resolve correctly.
+    const ansiCodePage = readWindowsAnsiCodePage(deps.execFileSync) || 1252;
+    const stdoutBuf: Buffer = deps.execFileSync('where.exe', [configuredPath], {
+      encoding: 'buffer',
       stdio: ['ignore', 'pipe', 'ignore'],
       windowsHide: true,
-    });
+    }) as Buffer;
+    const stdout = decodeWithCodePage(stdoutBuf, ansiCodePage);
     const candidates = stdout
       .split(/\r?\n/)
       .map((entry) => entry.trim())
@@ -107,6 +178,13 @@ function resolveWindowsClaudeExecutablePath(
     }
 
     for (const candidate of candidates) {
+      // npm .bin wrappers need to resolve up one directory
+      if (pathApi.basename(pathApi.dirname(candidate)) === '.bin') {
+        const binCandidate = pathApi.resolve(pathApi.dirname(candidate), '..', ...CLAUDE_WRAPPER_SEGMENTS);
+        if (deps.existsSync(binCandidate)) {
+          return binCandidate;
+        }
+      }
       const resolved = resolveClaudeWrapperBinary(candidate, deps);
       if (resolved) {
         return resolved;
