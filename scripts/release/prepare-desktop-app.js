@@ -114,9 +114,11 @@ await copyRequired('public');
 
 // The desktop app still ships the standalone Computer Use desktop agent, but
 // not the full local server. Local CloudCLI is downloaded on demand.
-await copyRequired('dist-server/server/computer-use-agent.js');
-await copyIfExists('dist-server/server/computer-use-agent.js.map');
-await copyRequired('dist-server/server/modules/computer-use');
+// NOTE: 本地修改版需要打包完整 dist-server，否则会去 GitHub 下载上游发布包
+await copyRequired('dist-server');
+// await copyRequired('dist-server/server/computer-use-agent.js');
+// await copyIfExists('dist-server/server/computer-use-agent.js.map');
+// await copyRequired('dist-server/server/modules/computer-use');
 
 const copiedRuntimeDependencies = [];
 if (await copyNodeModule('ws')) {
