@@ -146,12 +146,28 @@ function matchesToolPermission(entry, toolName, input) {
 }
 
 /**
+ * Maps UI language codes to Claude output language instructions.
+ * Only returns an instruction for non-English languages.
+ */
+const LANGUAGE_INSTRUCTIONS = {
+  'zh-CN': 'IMPORTANT — Output language: Always respond in Simplified Chinese (简体中文). All thinking, reasoning, descriptions, tool use messages, and replies must be in Simplified Chinese.',
+  'zh-TW': 'IMPORTANT — Output language: Always respond in Traditional Chinese (繁體中文). All thinking, reasoning, descriptions, tool use messages, and replies must be in Traditional Chinese.',
+  ja: 'IMPORTANT — Output language: Always respond in Japanese (日本語). All thinking, reasoning, descriptions, tool use messages, and replies must be in Japanese.',
+  ko: 'IMPORTANT — Output language: Always respond in Korean (한국어). All thinking, reasoning, descriptions, tool use messages, and replies must be in Korean.',
+  ru: 'IMPORTANT — Output language: Always respond in Russian (Русский). All thinking, reasoning, descriptions, tool use messages, and replies must be in Russian.',
+  de: 'IMPORTANT — Output language: Always respond in German (Deutsch). All thinking, reasoning, descriptions, tool use messages, and replies must be in German.',
+  fr: 'IMPORTANT — Output language: Always respond in French (Français). All thinking, reasoning, descriptions, tool use messages, and replies must be in French.',
+  it: 'IMPORTANT — Output language: Always respond in Italian (Italiano). All thinking, reasoning, descriptions, tool use messages, and replies must be in Italian.',
+  tr: 'IMPORTANT — Output language: Always respond in Turkish (Türkçe). All thinking, reasoning, descriptions, tool use messages, and replies must be in Turkish.',
+};
+
+/**
  * Maps CLI options to SDK-compatible options format
  * @param {Object} options - CLI options
  * @returns {Object} SDK-compatible options
  */
 function mapCliOptionsToSDK(options = {}) {
-  const { sessionId, cwd, toolsSettings, permissionMode } = options;
+  const { sessionId, cwd, toolsSettings, permissionMode, language } = options;
 
   const sdkOptions = {};
 
@@ -213,9 +229,25 @@ function mapCliOptionsToSDK(options = {}) {
   // Model logged at query start below
 
   // Map system prompt configuration
+  const appendLines = [
+    'CRITICAL — Edit tool whitespace rules:',
+    '- The old_string parameter must match the file content EXACTLY, including all whitespace characters.',
+    '- Tab characters (\\t) MUST be preserved as-is. Never convert tabs to spaces or spaces to tabs.',
+    '- Copy old_string directly from the Read tool output — do not prettify, reflow, or normalize whitespace.',
+    '- If the file uses tabs for indentation, your old_string must use identical tab characters at identical positions.',
+    '- Before falling back to Write: re-read the specific lines you want to edit and copy them verbatim.',
+  ];
+
+  // Append output language instruction when UI language is non-English
+  if (language && LANGUAGE_INSTRUCTIONS[language]) {
+    appendLines.push('');
+    appendLines.push(LANGUAGE_INSTRUCTIONS[language]);
+  }
+
   sdkOptions.systemPrompt = {
     type: 'preset',
-    preset: 'claude_code'  // Required to use CLAUDE.md
+    preset: 'claude_code',  // Required to use CLAUDE.md
+    append: appendLines.join('\n'),
   };
 
   // Map setting sources for CLAUDE.md loading
@@ -552,7 +584,97 @@ async function queryClaudeSDK(command, options = {}, ws) {
     tempImagePaths = imageResult.tempImagePaths;
     tempDir = imageResult.tempDir;
 
+    /**
+     * Attempts to fix whitespace mismatches in Edit tool old_string by
+     * normalizing whitespace and re-matching against the actual file content.
+     * The AI model may generate old_string with spaces where the file uses tabs
+     * (or vice versa), causing the SDK's exact-match Edit to fail. This function
+     * finds the corrected text from disk so the Edit can proceed.
+     *
+     * @param {string} fileContent - Actual file content read from disk
+     * @param {string} oldString - The old_string from the Edit tool call
+     * @returns {string|null} Corrected old_string if a unique match found, null otherwise
+     */
+    function fixEditWhitespace(fileContent, oldString) {
+      // Fast path: exact match already works, no correction needed
+      if (fileContent.includes(oldString)) {
+        return null;
+      }
+
+      // Split into lines for matching
+      const oldLines = oldString.split('\n');
+      const fileLines = fileContent.split('\n');
+
+      // Normalize: collapse all whitespace sequences to a single space, trim
+      const norm = (line) => line.replace(/\s+/g, ' ').trim();
+
+      const normalizedOld = oldLines.map(norm);
+      const normalizedFile = fileLines.map(norm);
+
+      // Sliding window: find all positions where normalized old_lines match
+      const N = normalizedOld.length;
+      const matches = [];
+
+      for (let i = 0; i <= normalizedFile.length - N; i++) {
+        let matched = true;
+        for (let j = 0; j < N; j++) {
+          if (normalizedFile[i + j] !== normalizedOld[j]) {
+            matched = false;
+            break;
+          }
+        }
+        if (matched) {
+          matches.push(i);
+        }
+      }
+
+      // Safety: only correct when exactly one match is found to avoid wrong edits
+      if (matches.length !== 1) {
+        return null;
+      }
+
+      // Extract the original (correct) text from the file at the match position
+      const startLine = matches[0];
+      const originalLines = fileLines.slice(startLine, startLine + N);
+      return originalLines.join('\n');
+    }
+
     sdkOptions.hooks = {
+      PreToolUse: [{
+        matcher: 'Edit',
+        hooks: [async (input) => {
+          const toolInput = input?.tool_input || {};
+          const oldString = toolInput?.old_string;
+          const filePath = toolInput?.file_path;
+
+          if (!oldString || !filePath) return {};
+
+          try {
+            const resolvedPath = path.isAbsolute(filePath)
+              ? filePath
+              : path.resolve(options.cwd || process.cwd(), filePath);
+            const fileContent = await fs.readFile(resolvedPath, 'utf-8');
+
+            const corrected = fixEditWhitespace(fileContent, oldString);
+            if (corrected && corrected !== oldString) {
+              console.log(
+                `[PreToolUse] Edit old_string whitespace corrected for: ${filePath}`
+              );
+              return {
+                updatedInput: { ...toolInput, old_string: corrected },
+              };
+            }
+          } catch (err) {
+            // File read failed or matching failed — let SDK handle normally
+            console.warn(
+              `[PreToolUse] Could not check/fix Edit whitespace for ${filePath}:`,
+              err?.message || err
+            );
+          }
+
+          return {};
+        }],
+      }],
       Notification: [{
         matcher: '',
         hooks: [async (input) => {

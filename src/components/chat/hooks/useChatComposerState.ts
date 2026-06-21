@@ -11,6 +11,7 @@ import type {
 } from 'react';
 import { useDropzone } from 'react-dropzone';
 
+import i18n from '../../../i18n/config.js';
 import { authenticatedFetch } from '../../../utils/api';
 import type { MarkSessionProcessing } from '../../../hooks/useSessionProtection';
 import { grantClaudeToolPermission } from '../utils/chatPermissions';
@@ -729,6 +730,7 @@ export function useChatComposerState({
           skipPermissions: toolsSettings?.skipPermissions || false,
           sessionSummary,
           images: uploadedImages,
+          language: i18n.language,
         },
       });
 

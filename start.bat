@@ -1,13 +1,12 @@
 @echo off
 title CloudCLI
+cd /d "%~dp0"
 
-set "PROJECT_DIR=F:\工程\claudecodeui"
-cd /d "%PROJECT_DIR%"
-
-if not exist "%PROJECT_DIR%\node_modules\" (
-    msg %username% "CloudCLI: node_modules not found!"
+if not exist "%~dp0node_modules\" (
+    echo [ERROR] node_modules not found, run npm install first
+    pause
     exit /b 1
 )
 
-start "" http://localhost:5173
-npm run dev
+chcp 65001 >nul
+powershell -NoLogo -NoExit -ExecutionPolicy Bypass -File "%~dp0start.ps1"
